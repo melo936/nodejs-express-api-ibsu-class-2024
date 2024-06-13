@@ -7,10 +7,11 @@
 var app = require('../app');
 var debug = require('debug')('backend:server');
 var http = require('http');
-const mongoose = require('mongoose');
 
 //to read .env file
 require('dotenv').config();
+
+const mongoose = require('mongoose');
 
 /**
  * Get port from environment and store in Express.
@@ -97,15 +98,15 @@ function startServer() {
 function connectToDB() {
   mongoose.connect(process.env.MONGO_URI)
     .then(() => {
-      console.log("connected to mongodb", process.env.MONGO_URI)
+      console.log('connected_to_db', process.env.MONGO_URI);
       startServer();
     })
     .catch(error => {
-      console.error('error_on_mongodb_connection', error);
+      console.error('error_on_db_connection', error);
       setTimeout(() => {
         connectToDB();
-      }, 1500);
-    })
+      }, 1000)
+    });
 }
 
 connectToDB();

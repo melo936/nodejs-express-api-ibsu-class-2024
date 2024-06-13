@@ -1,29 +1,50 @@
 const StudentModel = require('../models/student');
 
 module.exports = {
-    findAll: (req, res) => {
+    getAll: (req, res) => {
         StudentModel.find({})
             .then(data => {
                 res.json(data);
             })
             .catch(error => {
-                res.status(400).json(error);
+                res.status(500).json(error);
             })
     },
-    addStudent: async (req, res) => {
+    add: async (req, res) => {
         try {
             const savedItem = await new StudentModel(req.body).save();
             res.json(savedItem);
-        } catch(error) {
-            res.status(400).json(error);
+        } catch (error) {
+            res.status(500).json(error);
         }
     },
     getOne: async (req, res) => {
         try {
-            const student = await StudentModel.findById(req.params.id);
-            res.json(student);
-        }  catch(error) {
-            res.status(400).json(error);
+            const item = await StudentModel.findById(req.params.id);
+            res.json(item);
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+    delete: async (req, res) => {
+        try {
+            await StudentModel.deleteOne({ _id: req.params.id });
+            res.json({ success: true });
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+    update: async (req, res) => {
+        try {
+            const item = await StudentModel.findByIdAndUpdate(req.params.id,
+                { $set: req.body },
+                {
+                    new: true
+                }
+            );
+            res.json(item);
+        } catch (error) {
+            res.status(500).json(error);
         }
     }
 }

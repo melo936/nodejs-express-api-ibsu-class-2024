@@ -11,14 +11,15 @@ const studentSchema = new mongoose.Schema({
         name: { type: String }
     }]
 }, {
+    collection: 'students',
     timestamps: true,
     read: 'nearest',
     writeConcern: {
         w: 'majority',
-        wtimeoutMS: 30000,
-        j: true
+        j: true,
+        wtimeoutMS: 30000
     }
 });
 
-const Model = mongoose.model('Student', studentSchema);
-module.exports = Model;
+const STModel = mongoose.model('Student', studentSchema);
+module.exports = STModel;
